@@ -10,7 +10,7 @@
   <td class="px-6 py-4">{{ assignedTo }}</td>
   <td class="px-6 py-4">
     <span
-      class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+      class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer pr-3"
       @click="editTask()"
     >
       <i class="fa fa-edit"></i>
