@@ -9,13 +9,14 @@
   <td class="px-6 py-4">{{ createdBy }}</td>
   <td class="px-6 py-4">{{ assignedTo }}</td>
   <td class="px-6 py-4">
-    <span class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer">
+    <span
+      class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+      @click="editTask()"
+    >
       <i class="fa fa-edit"></i>
     </span>
     <span
       class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
-      data-modal-target="popup-modal"
-      data-modal-toggle="popup-modal"
       @click="removeTask()"
     >
       <i class="fa fa-trash"></i>
@@ -37,14 +38,19 @@ export default defineComponent({
   components: {},
   setup(props) {
     const store = useStore();
-    const removeTask = () => {
-      if (window.confirm("Are you sure")) {
-        store.commit(MutationType.RemoveTask, {
-          id: props.id,
-        });
-      }
+    const editTask = () => {
+      store.commit(MutationType.SetEditModal, {
+        showModal: true,
+        taskId: props.id,
+      });
     };
-    return { removeTask };
+    const removeTask = () => {
+      store.commit(MutationType.SetRemoveModal, {
+        showModal: true,
+        taskId: props.id,
+      });
+    };
+    return { removeTask, editTask };
   },
 });
 </script>
