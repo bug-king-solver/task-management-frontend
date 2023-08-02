@@ -7,6 +7,7 @@ export enum MutationType {
   RemoveTask = "REMOVE_TASK",
   UpdateTask = `UPDATE_TASK`,
 
+  SetLoading = "SET_LOADING",
   SetCreateModal = "SET_CREATE_MODAL",
   SetEditModal = "SET_EDIT_MODAL",
   SetRemoveModal = "SET_REMOVE_MODAL",
@@ -24,6 +25,7 @@ export type Mutations = {
     task: Partial<TaskItem> & { id: number }
   ): void;
 
+  [MutationType.SetLoading](state: State, value: boolean): void;
   [MutationType.SetCreateModal](state: State, value: boolean): void;
   [MutationType.SetEditModal](
     state: State,
@@ -60,6 +62,9 @@ export const mutations: MutationTree<State> & Mutations = {
     state.showEditModal = false;
   },
 
+  [MutationType.SetLoading](state, value) {
+    state.loading = value;
+  },
   [MutationType.SetCreateModal](state, value) {
     state.showCreateModal = value;
   },
