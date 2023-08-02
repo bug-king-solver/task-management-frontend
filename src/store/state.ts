@@ -1,6 +1,6 @@
 export type TaskItem = {
   id: number;
-  task: string;
+  taskDesc: string;
   createdBy: string;
   assignedTo: string;
   editing: boolean;
@@ -9,9 +9,11 @@ export type TaskItem = {
 export type State = {
   loading: boolean;
   tasks: TaskItem[];
+  showCreateModal: boolean;
 };
 
 export const state: State = {
   loading: false,
   tasks: [],
+  showCreateModal: false,
 };

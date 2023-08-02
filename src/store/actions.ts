@@ -26,21 +26,21 @@ export const actions: ActionTree<State, State> & Actions = {
     commit(MutationType.SetTasks, [
       {
         id: 1,
-        task: "The programing language should have full typescript support",
+        taskDesc: "task1",
         createdBy: "Emmanuel John",
         assignedTo: "Saviour Peter",
         editing: false,
       },
       {
         id: 2,
-        task: "Vue 3 Task Management App with TypeScript and VueX 4",
+        taskDesc: "task2",
         createdBy: "Arman Abkar",
         assignedTo: "Arman Abkar",
         editing: false,
       },
       {
         id: 3,
-        task: "Eu Lorem esse sint irure do duis nisi commodo nostrud. Eu dolore Lorem do consectetur dolor esse nostrud Lorem id nulla. Id tempor esse in sint non consectetur culpa. Tempor pariatur velit occaecat sunt nostrud voluptate aliquip officia nulla eu eu reprehenderit. Ipsum aliqua mollit cupidatat ex.",
+        taskDesc: "task3",
         createdBy: "Emmanuel John",
         assignedTo: "Jon Doe",
         editing: false,

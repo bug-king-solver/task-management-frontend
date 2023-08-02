@@ -9,16 +9,23 @@
   <td class="px-6 py-4">{{ createdBy }}</td>
   <td class="px-6 py-4">{{ assignedTo }}</td>
   <td class="px-6 py-4">
-    <span class="w-6 h-6 text-gray-800 dark:text-white">
+    <span class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer">
       <i class="fa fa-edit"></i>
     </span>
-    <span class="w-6 h-6 text-gray-800 dark:text-white">
+    <span
+      class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
+      data-modal-target="popup-modal"
+      data-modal-toggle="popup-modal"
+      @click="removeTask()"
+    >
       <i class="fa fa-trash"></i>
     </span>
   </td>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useStore } from "@/store";
+import { MutationType } from "@/store/mutations";
 
 export default defineComponent({
   props: {
@@ -28,5 +35,16 @@ export default defineComponent({
     assignedTo: { type: String, required: true },
   },
   components: {},
+  setup(props) {
+    const store = useStore();
+    const removeTask = () => {
+      if (window.confirm("Are you sure")) {
+        store.commit(MutationType.RemoveTask, {
+          id: props.id,
+        });
+      }
+    };
+    return { removeTask };
+  },
 });
 </script>
