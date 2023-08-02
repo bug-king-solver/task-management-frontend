@@ -21,8 +21,14 @@
             <th scope="col" class="px-6 py-3">Action</th>
           </tr>
         </thead>
-        <tbody>
-          <task-list-item />
+        <tbody v-if="tasks">
+          <tr
+            v-for="task in tasks"
+            :key="task.ID"
+            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          >
+            <task-list-item v-bind="task" />
+          </tr>
         </tbody>
       </table>
     </div>
@@ -30,10 +36,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
+import { useStore } from "vuex";
 import TaskListItem from "./TaskListItem.vue";
 export default defineComponent({
   name: "TaskList",
   components: { TaskListItem },
+  setup() {
+    const store = useStore();
+    const tasks = computed(() => store.state.tasks);
+    return {
+      tasks,
+    };
+  },
 });
 </script>
