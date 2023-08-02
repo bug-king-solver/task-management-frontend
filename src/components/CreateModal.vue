@@ -99,7 +99,9 @@ export default {
         assignedTo: state.assignedTo,
         editing: false,
       };
+
       store.commit(MutationType.CreateTask, task);
+
       state.taskDesc = "";
       state.createdBy = "";
       state.assignedTo = "";
