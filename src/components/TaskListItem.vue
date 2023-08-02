@@ -4,7 +4,7 @@
     scope="row"
     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
   >
-    {{ task }}
+    {{ taskDesc }}
   </th>
   <td class="px-6 py-4">{{ createdBy }}</td>
   <td class="px-6 py-4">{{ assignedTo }}</td>
@@ -23,7 +23,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   props: {
     id: { type: Number, required: true },
-    task: { type: String, required: true },
+    taskDesc: { type: String, required: true },
     createdBy: { type: String, required: true },
     assignedTo: { type: String, required: true },
   },
