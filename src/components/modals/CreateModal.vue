@@ -70,11 +70,11 @@
   </div>
 </template>
 <script lang="ts">
-import { reactive, toRefs } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 import { useStore } from "@/store";
 import { TaskItem } from "@/store/state";
 import { MutationType } from "@/store/mutations";
-export default {
+export default defineComponent({
   name: "CreateModal",
   setup() {
     const state = reactive({
@@ -113,5 +113,5 @@ export default {
 
     return { closeModal, ...toRefs(state), createTask };
   },
-};
+});
 </script>
