@@ -26,6 +26,7 @@
 <script lang="ts">
 import { useStore } from "@/store";
 import { MutationType } from "@/store/mutations";
+import { ActionTypes } from "@/store/actions";
 export default {
   name: "RemoveModal",
   props: {
@@ -34,9 +35,7 @@ export default {
   setup(props: any) {
     const store = useStore();
     const removeTask = () => {
-      store.commit(MutationType.RemoveTask, {
-        id: props.id,
-      });
+      store.dispatch(ActionTypes.RemoveTask, props.id);
     };
     const closeModal = () => {
       store.commit(MutationType.SetRemoveModal, {

@@ -74,6 +74,7 @@ import { reactive, onMounted, toRefs } from "vue";
 import { useStore } from "@/store";
 import { TaskItem } from "@/store/state";
 import { MutationType } from "@/store/mutations";
+import { ActionTypes } from "@/store/actions";
 export default {
   name: "EditModal",
   props: {
@@ -112,7 +113,7 @@ export default {
         assignedTo: state.assignedTo,
         editing: false,
       };
-      store.commit(MutationType.UpdateTask, task);
+      store.dispatch(ActionTypes.UpdateTask, task);
     };
     const closeModal = () => {
       store.commit(MutationType.SetEditModal, {

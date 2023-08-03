@@ -16,10 +16,7 @@ export enum MutationType {
 export type Mutations = {
   [MutationType.SetTasks](state: State, tasks: TaskItem[]): void;
   [MutationType.CreateTask](state: State, task: TaskItem): void;
-  [MutationType.RemoveTask](
-    state: State,
-    task: Partial<TaskItem> & { id: number }
-  ): void;
+  [MutationType.RemoveTask](state: State, id: number): void;
   [MutationType.UpdateTask](
     state: State,
     task: Partial<TaskItem> & { id: number }
@@ -46,8 +43,8 @@ export const mutations: MutationTree<State> & Mutations = {
     state.tasks.push(task);
     state.showCreateModal = false;
   },
-  [MutationType.RemoveTask](state, Task) {
-    const task = state.tasks.findIndex((element) => element.id === Task.id);
+  [MutationType.RemoveTask](state, taskId) {
+    const task = state.tasks.findIndex((element) => element.id === taskId);
     if (task === -1) return;
     //If Task exist in the state, remove it
     state.tasks.splice(task, 1);

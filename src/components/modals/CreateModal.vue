@@ -71,9 +71,12 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import { useStore } from "@/store";
 import { TaskItem, state } from "@/store/state";
 import { MutationType } from "@/store/mutations";
+import { ActionTypes } from "@/store/actions";
 export default defineComponent({
   name: "CreateModal",
   setup() {
@@ -82,16 +85,15 @@ export default defineComponent({
       createdBy: "",
       assignedTo: "",
     });
+    const rules = {
+      taskDesc: { required },
+      createdBy: { required },
+      assignedTo: { required },
+    };
     const store = useStore();
 
+    const v$ = useVuelidate(rules, newTask);
     const createTask = () => {
-      if (
-        newTask.taskDesc === "" ||
-        newTask.createdBy === "" ||
-        newTask.assignedTo === ""
-      )
-        return;
-
       const task: TaskItem = {
         id: state.tasks.length + 1,
         taskDesc: newTask.taskDesc,
@@ -100,7 +102,7 @@ export default defineComponent({
         editing: false,
       };
 
-      store.commit(MutationType.CreateTask, task);
+      store.dispatch(ActionTypes.CreateTask, task);
 
       newTask.taskDesc = "";
       newTask.createdBy = "";
@@ -111,7 +113,7 @@ export default defineComponent({
       store.commit(MutationType.SetCreateModal, false);
     };
 
-    return { closeModal, ...toRefs(newTask), createTask };
+    return { closeModal, ...toRefs(newTask), createTask, v$ };
   },
 });
 </script>
