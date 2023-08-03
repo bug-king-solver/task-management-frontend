@@ -39,7 +39,7 @@
           </tbody>
         </table>
       </div>
-      <create-modal v-show="showCreateModal" />
+      <create-modal v-if="showCreateModal" />
       <edit-modal v-if="showEditModal" :id="editTaskId" />
       <remove-modal v-if="showRemoveModal" :id="removeTaskId" />
     </div>
@@ -51,9 +51,9 @@ import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 import { MutationType } from "@/store/mutations";
 import TaskListItem from "./TaskListItem.vue";
-import CreateModal from "./CreateModal.vue";
-import EditModal from "./EditModal.vue";
-import RemoveModal from "./RemoveModal.vue";
+import CreateModal from "./modals/CreateModal.vue";
+import EditModal from "./modals/EditModal.vue";
+import RemoveModal from "./modals/RemoveModal.vue";
 
 export default defineComponent({
   name: "TaskList",
