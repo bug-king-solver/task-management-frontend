@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "start": "json-server --watch src/api/tasks.json --port 3001",
+    "dev": "concurrently \"vue-cli-service serve\" \"json-server --watch src/api/tasks.json --port 3001\"",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
@@ -16,6 +17,7 @@
     "@vuelidate/validators": "^2.0.3",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
+    "concurrently": "^8.2.0",
     "core-js": "^3.8.3",
     "faker": "^6.6.6",
     "global": "^4.4.0",
