@@ -72,12 +72,12 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { useStore } from "@/store";
-import { TaskItem } from "@/store/state";
+import { TaskItem, state } from "@/store/state";
 import { MutationType } from "@/store/mutations";
 export default defineComponent({
   name: "CreateModal",
   setup() {
-    const state = reactive({
+    const newTask = reactive({
       taskDesc: "",
       createdBy: "",
       assignedTo: "",
@@ -86,32 +86,32 @@ export default defineComponent({
 
     const createTask = () => {
       if (
-        state.taskDesc === "" ||
-        state.createdBy === "" ||
-        state.assignedTo === ""
+        newTask.taskDesc === "" ||
+        newTask.createdBy === "" ||
+        newTask.assignedTo === ""
       )
         return;
 
       const task: TaskItem = {
-        id: Date.now(),
-        taskDesc: state.taskDesc,
-        createdBy: state.createdBy,
-        assignedTo: state.assignedTo,
+        id: state.tasks.length + 1,
+        taskDesc: newTask.taskDesc,
+        createdBy: newTask.createdBy,
+        assignedTo: newTask.assignedTo,
         editing: false,
       };
 
       store.commit(MutationType.CreateTask, task);
 
-      state.taskDesc = "";
-      state.createdBy = "";
-      state.assignedTo = "";
+      newTask.taskDesc = "";
+      newTask.createdBy = "";
+      newTask.assignedTo = "";
     };
 
     const closeModal = () => {
       store.commit(MutationType.SetCreateModal, false);
     };
 
-    return { closeModal, ...toRefs(state), createTask };
+    return { closeModal, ...toRefs(newTask), createTask };
   },
 });
 </script>
