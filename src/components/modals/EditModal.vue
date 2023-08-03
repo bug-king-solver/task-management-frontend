@@ -17,10 +17,12 @@
             type="text"
             name="taskDesc"
             id="taskDesc"
-            v-model="taskDesc"
+            v-model="state.taskDesc"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            required
           />
+          <span class="text-red-400" v-if="v$.taskDesc.$error">
+            Please type here *
+          </span>
         </div>
         <div>
           <label
@@ -32,10 +34,12 @@
             type="text"
             name="createdBy"
             id="createdBy"
-            v-model="createdBy"
+            v-model="state.createdBy"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            required
           />
+          <span class="text-red-400" v-if="v$.createdBy.$error">
+            Please type here *
+          </span>
         </div>
         <div>
           <label
@@ -47,10 +51,12 @@
             type="text"
             name="assignedTo"
             id="assignedTo"
-            v-model="assignedTo"
+            v-model="state.assignedTo"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            required
           />
+          <span class="text-red-400" v-if="v$.assignedTo.$error">
+            Please type here *
+          </span>
         </div>
         <button
           type="submit"
@@ -70,7 +76,9 @@
   </div>
 </template>
 <script lang="ts">
-import { reactive, onMounted, toRefs } from "vue";
+import { reactive, onMounted, toRefs, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import { useStore } from "@/store";
 import { TaskItem } from "@/store/state";
 import { MutationType } from "@/store/mutations";
@@ -86,7 +94,16 @@ export default {
       createdBy: "",
       assignedTo: "",
     });
+    const rules = computed(() => {
+      return {
+        taskDesc: { required },
+        createdBy: { required },
+        assignedTo: { required },
+      };
+    });
     const store = useStore();
+    const v$ = useVuelidate(rules, state);
+
     const setFields = () => {
       const task = store.getters.getTaskById(Number(props.id));
       if (task) {
@@ -98,14 +115,7 @@ export default {
     onMounted(() => {
       setFields();
     });
-    const updateTask = () => {
-      if (
-        state.taskDesc === "" ||
-        state.createdBy === "" ||
-        state.assignedTo === ""
-      )
-        return;
-
+    const updateTask = async () => {
       const task: TaskItem = {
         id: props.id,
         taskDesc: state.taskDesc,
@@ -113,7 +123,14 @@ export default {
         assignedTo: state.assignedTo,
         editing: false,
       };
-      store.dispatch(ActionTypes.UpdateTask, task);
+      try {
+        const valid = await v$.value.$validate();
+        if (valid) {
+          store.dispatch(ActionTypes.UpdateTask, task);
+        }
+      } catch (error) {
+        alert(error);
+      }
     };
     const closeModal = () => {
       store.commit(MutationType.SetEditModal, {
@@ -123,8 +140,9 @@ export default {
     };
     return {
       updateTask,
-      ...toRefs(state),
+      state,
       closeModal,
+      v$,
     };
   },
 };
