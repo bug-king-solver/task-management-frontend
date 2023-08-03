@@ -5,7 +5,7 @@
     <div class="relative bg-gray-50 dark:bg-gray-700 rounded-lg p-8 max-w-md">
       <form class="space-y-6" @submit.prevent="removeTask">
         <h5 class="text-xl font-medium text-gray-900 dark:text-white">
-          Edit Task
+          Remove Task
         </h5>
         <button
           type="submit"
@@ -26,6 +26,7 @@
 <script lang="ts">
 import { useStore } from "@/store";
 import { MutationType } from "@/store/mutations";
+import { ActionTypes } from "@/store/actions";
 export default {
   name: "RemoveModal",
   props: {
@@ -34,9 +35,7 @@ export default {
   setup(props: any) {
     const store = useStore();
     const removeTask = () => {
-      store.commit(MutationType.RemoveTask, {
-        id: props.id,
-      });
+      store.dispatch(ActionTypes.RemoveTask, props.id);
     };
     const closeModal = () => {
       store.commit(MutationType.SetRemoveModal, {

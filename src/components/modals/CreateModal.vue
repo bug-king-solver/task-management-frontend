@@ -17,10 +17,12 @@
             type="text"
             name="taskDesc"
             id="taskDesc"
-            v-model="taskDesc"
+            v-model="newTask.taskDesc"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            required
           />
+          <span class="text-red-400" v-if="v$.taskDesc.$error">
+            Please type here *
+          </span>
         </div>
         <div>
           <label
@@ -32,10 +34,13 @@
             type="text"
             name="createdBy"
             id="createdBy"
-            v-model="createdBy"
+            v-model="newTask.createdBy"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            required
           />
+
+          <span class="text-red-400" v-if="v$.createdBy.$error">
+            Please type here *
+          </span>
         </div>
         <div>
           <label
@@ -47,10 +52,13 @@
             type="text"
             name="assignedTo"
             id="assignedTo"
-            v-model="assignedTo"
+            v-model="newTask.assignedTo"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            required
           />
+
+          <span class="text-red-400" v-if="v$.assignedTo.$error">
+            Please type here *
+          </span>
         </div>
         <button
           type="submit"
@@ -70,48 +78,60 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import { useStore } from "@/store";
-import { TaskItem } from "@/store/state";
+import { TaskItem, state } from "@/store/state";
 import { MutationType } from "@/store/mutations";
+import { ActionTypes } from "@/store/actions";
 export default defineComponent({
   name: "CreateModal",
   setup() {
-    const state = reactive({
+    const newTask = reactive({
       taskDesc: "",
       createdBy: "",
       assignedTo: "",
     });
+    const rules = computed(() => {
+      return {
+        taskDesc: { required },
+        createdBy: { required },
+        assignedTo: { required },
+      };
+    });
     const store = useStore();
 
-    const createTask = () => {
-      if (
-        state.taskDesc === "" ||
-        state.createdBy === "" ||
-        state.assignedTo === ""
-      )
-        return;
+    const v$ = useVuelidate(rules, newTask);
 
+    const createTask = async () => {
       const task: TaskItem = {
-        id: Date.now(),
-        taskDesc: state.taskDesc,
-        createdBy: state.createdBy,
-        assignedTo: state.assignedTo,
+        id: state.tasks.length + 1,
+        taskDesc: newTask.taskDesc,
+        createdBy: newTask.createdBy,
+        assignedTo: newTask.assignedTo,
         editing: false,
       };
 
-      store.commit(MutationType.CreateTask, task);
+      try {
+        const valid = await v$.value.$validate();
+        if (valid) {
+          store.dispatch(ActionTypes.CreateTask, task);
+        }
+      } catch (error) {
+        alert(error);
+      }
 
-      state.taskDesc = "";
-      state.createdBy = "";
-      state.assignedTo = "";
+      newTask.taskDesc = "";
+      newTask.createdBy = "";
+      newTask.assignedTo = "";
     };
 
     const closeModal = () => {
       store.commit(MutationType.SetCreateModal, false);
     };
 
-    return { closeModal, ...toRefs(state), createTask };
+    return { closeModal, newTask, createTask, v$ };
   },
 });
 </script>
