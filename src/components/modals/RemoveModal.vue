@@ -5,7 +5,7 @@
     <div class="relative bg-gray-50 dark:bg-gray-700 rounded-lg p-8 max-w-md">
       <form class="space-y-6" @submit.prevent="removeTask">
         <h5 class="text-xl font-medium text-gray-900 dark:text-white">
-          Edit Task
+          Remove Task
         </h5>
         <button
           type="submit"
