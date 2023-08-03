@@ -42,6 +42,7 @@ export const mutations: MutationTree<State> & Mutations = {
     state.tasks = tasks;
   },
   [MutationType.CreateTask](state, task) {
+    task.id = state.tasks.length + 1;
     state.tasks.push(task);
     state.showCreateModal = false;
   },

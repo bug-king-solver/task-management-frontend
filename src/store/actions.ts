@@ -1,6 +1,7 @@
 import { ActionContext, ActionTree } from "vuex";
 import { Mutations, MutationType } from "./mutations";
-import { State } from "./state";
+import { State, TaskItem } from "./state";
+import { tasksJSON } from "../data/idnex";
 
 export enum ActionTypes {
   GetTaskItems = "GET_Task_ITEMS",
@@ -27,31 +28,9 @@ export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.GetTaskItems]({ commit }) {
     commit(MutationType.SetLoading, true);
     await sleep(1000);
-
+    const tasksFromJSON: TaskItem[] = JSON.parse(tasksJSON);
     commit(MutationType.SetLoading, false);
-    commit(MutationType.SetTasks, [
-      {
-        id: 1,
-        taskDesc: "task1",
-        createdBy: "Emmanuel John",
-        assignedTo: "Saviour Peter",
-        editing: false,
-      },
-      {
-        id: 2,
-        taskDesc: "task2",
-        createdBy: "Arman Abkar",
-        assignedTo: "Arman Abkar",
-        editing: false,
-      },
-      {
-        id: 3,
-        taskDesc: "task3",
-        createdBy: "Emmanuel John",
-        assignedTo: "Jon Doe",
-        editing: false,
-      },
-    ]);
+    commit(MutationType.SetTasks, tasksFromJSON);
   },
   async [ActionTypes.SetCreateModal]({ commit }) {
     commit(MutationType.SetCreateModal, true);
