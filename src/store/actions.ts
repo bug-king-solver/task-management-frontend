@@ -32,7 +32,9 @@ export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.GetTaskItems]({ commit }) {
     commit(MutationType.SetLoading, true);
     try {
-      const response = await axios.get("http://localhost:3001/tasks");
+      const response = await axios.get(
+        "https://task-management-backend-two.vercel.app/tasks"
+      );
       commit(MutationType.SetLoading, false);
       const tasks = response.data;
       commit(MutationType.SetTasks, tasks);
@@ -42,7 +44,10 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   async [ActionTypes.CreateTask]({ commit }, task) {
     try {
-      const response = await axios.post("http://localhost:3001/tasks", task);
+      const response = await axios.post(
+        "https://task-management-backend-two.vercel.app/tasks",
+        task
+      );
       const createdTask = response.data;
       commit(MutationType.CreateTask, createdTask);
     } catch (error) {
@@ -51,7 +56,10 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   async [ActionTypes.UpdateTask]({ commit }, task) {
     try {
-      await axios.put(`http://localhost:3001/tasks/${task.id}`, task);
+      await axios.put(
+        `https://task-management-backend-two.vercel.app/tasks/${task.id}`,
+        task
+      );
       commit(MutationType.UpdateTask, task);
     } catch (error) {
       console.error("Error editing task:", error);
@@ -59,7 +67,9 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   async [ActionTypes.RemoveTask]({ commit }, taskId) {
     try {
-      await axios.delete(`http://localhost:3001/tasks/${taskId}`);
+      await axios.delete(
+        `https://task-management-backend-two.vercel.app/tasks/${taskId}`
+      );
       commit(MutationType.RemoveTask, taskId);
     } catch (error) {
       console.error("Error deleting task:", error);
