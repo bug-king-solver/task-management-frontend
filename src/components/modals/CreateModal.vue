@@ -121,10 +121,6 @@ export default defineComponent({
       } catch (error) {
         alert(error);
       }
-
-      newTask.taskDesc = "";
-      newTask.createdBy = "";
-      newTask.assignedTo = "";
     };
 
     const closeModal = () => {
